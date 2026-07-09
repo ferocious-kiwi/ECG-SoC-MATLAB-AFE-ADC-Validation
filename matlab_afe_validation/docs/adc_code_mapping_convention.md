@@ -13,15 +13,15 @@ adc_signed = adc_offset_binary - 2048
 
 ## Mapping test
 
-|   입력전압_V |   offset_binary_code_decimal | offset_binary_code_hex   |   signed_decimal | 계산식                                            |
-|-------------:|-----------------------------:|:-------------------------|-----------------:|:--------------------------------------------------|
-| -1.65        |                            0 | 000                      |            -2048 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
-| -1           |                          806 | 326                      |            -1242 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
-| -0.000805861 |                         2046 | 7FE                      |               -2 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
-|  0           |                         2047 | 7FF                      |               -1 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
-|  0.000805861 |                         2048 | 800                      |                0 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
-|  1           |                         3288 | CD8                      |             1240 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
-|  1.65        |                         4095 | FFF                      |             2047 | floor((V + 1.65)/3.3 * 4095), [0,4095]로 clipping |
+|   input_voltage_V |   offset_binary_code_decimal | offset_binary_code_hex   |   signed_decimal | formula                                           |
+|------------------:|-----------------------------:|:-------------------------|-----------------:|:--------------------------------------------------|
+|      -1.65        |                            0 | 000                      |            -2048 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
+|      -1           |                          806 | 326                      |            -1242 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
+|      -0.000805861 |                         2046 | 7FE                      |               -2 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
+|       0           |                         2047 | 7FF                      |               -1 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
+|       0.000805861 |                         2048 | 800                      |                0 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
+|       1           |                         3288 | CD8                      |             1240 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
+|       1.65        |                         4095 | FFF                      |             2047 | floor((V + 1.65)/3.3 * 4095), clipped to [0,4095] |
 
 ## 파일 형식
 
@@ -35,3 +35,12 @@ adc_signed = adc_offset_binary - 2048
 
 현재 `floor` convention에서는 0 V가 offset-binary code `2047`, signed decimal `-1`로 mapping된다.  
 이것은 오류가 아니다. XMODEL 및 RTL testbench는 동일한 convention을 사용하거나, offset 차이가 있다면 문서에 명확히 기록해야 한다.
+
+## source input code와 AFE ADC output code 구분
+
+`reference_vectors/<CLASS>/input.csv`의 `source_code_signed_est_5uV_per_code`는 원본 ECG 입력 전압 scale을 추적하기 위한 estimate이다.  
+이 값은 **AFE ADC output code가 아니다.**
+
+- XMODEL analog input에는 `voltage_V`를 사용한다.
+- AFE ADC output reference는 `adc_offset_binary.mem` 및 `adc_signed.txt`이다.
+- `source_code_signed_est_5uV_per_code`는 input traceability 용도이며, XMODEL ADC output 비교에는 사용하지 않는다.

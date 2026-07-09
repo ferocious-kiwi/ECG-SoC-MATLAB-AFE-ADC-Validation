@@ -183,7 +183,7 @@ function H = freqz_eval(b, a, f, fs)
 end
 
 function [T, M] = make_notch_dense_sweep(p)
-    frequency_Hz = (55:0.001:65)';
+    frequency_Hz = (30:0.001:100)';
     H = active_twin_t_response(frequency_Hz, p.R_twin, p.C_twin, p.k_boot);
     magnitude_V_per_V = abs(H(:));
     magnitude_dB = 20*log10(max(magnitude_V_per_V, realmin));
@@ -209,9 +209,9 @@ function [T, M] = make_notch_dense_sweep(p)
     end
 
     M = table(60, center, exact60, min_att, bw_low, bw_high, bw, q_est, p.Q_notch, att50, ...
-        "60 Hz mains target; not claimed as complete 50 Hz rejection", ...
+        "60 Hz mains target; 30-100 Hz sweep; not claimed as complete 50 Hz rejection; bandwidth/Q are nominal MATLAB estimates, not physical circuit measurements", ...
         'VariableNames', {'target_frequency_Hz','notch_center_frequency_Hz','exact_60Hz_attenuation_dB', ...
-        'minimum_attenuation_dB_in_55_65Hz','minus3dB_bandwidth_low_Hz','minus3dB_bandwidth_high_Hz', ...
+        'minimum_attenuation_dB_in_sweep','minus3dB_bandwidth_low_Hz','minus3dB_bandwidth_high_Hz', ...
         'minus3dB_bandwidth_Hz','approximate_Q_from_minus3dB','configured_Q','attenuation_at_50Hz_dB','scope_note'});
 end
 
@@ -275,8 +275,8 @@ function make_reference_vectors(classes, results_dir, ref_dir)
         sample_index = (0:height(D)-1)';
         time_s = D.time_s;
         voltage_V = D.v_diff;
-        code_signed_est = round(voltage_V * 200000);
-        inputT = table(sample_index, time_s, voltage_V, code_signed_est);
+        source_code_signed_est_5uV_per_code = round(voltage_V * 200000);
+        inputT = table(sample_index, time_s, voltage_V, source_code_signed_est_5uV_per_code);
         writetable(inputT, fullfile(out_dir, 'input.csv'));
 
         D.Properties.VariableNames{'adc_code'} = 'adc_offset_binary';

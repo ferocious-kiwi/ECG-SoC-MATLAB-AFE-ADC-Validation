@@ -1,4 +1,4 @@
-sample_index,time_s,voltage_V,code_signed_est
+sample_index,time_s,voltage_V,source_code_signed_est_5uV_per_code
 0,0.0,-0.000425,-85
 1,0.001,-0.00044,-88
 2,0.002,-0.00045,-90
@@ -3049,7 +3049,7 @@ sample_index,time_s,voltage_V,code_signed_est
 3047,3.047,-3e-05,-6
 3048,3.048,-2.5e-05,-5
 3049,3.049,-1e-05,-2
-3050,3.05,6.6613381477487095e-18,0
+3050,3.05,6.66133814774871e-18,0
 3051,3.051,1.5e-05,3
 3052,3.052,2.5e-05,5
 3053,3.053,4.5e-05,9

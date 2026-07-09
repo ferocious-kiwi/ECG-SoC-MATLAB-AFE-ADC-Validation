@@ -16,6 +16,12 @@
 %  Note:
 %  This script provides MATLAB nominal references before SystemVerilog
 %  XMODEL implementation. It does not claim bit-exact XMODEL equivalence.
+%
+%  Reproducibility caveat:
+%  If afe_input_dataset/ is available, this script regenerates the
+%  dataset-level MATLAB outputs and rebuilds the reference package.
+%  If afe_input_dataset/ is absent, it rebuilds secondary reports,
+%  figures, and manifests from checked-in results_dataset/ artifacts.
 %% ================================================================
 
 clear; clc; close all;
@@ -26,7 +32,7 @@ fprintf('Running MATLAB AFE+ADC nominal pre-validation...\n');
 if exist('afe_input_dataset', 'dir')
     run_afe_dataset_validation;
 else
-    warning('afe_input_dataset/ not found. Existing results_dataset/ will be used if present.');
+    warning('afe_input_dataset/ not found. Rebuilding secondary reports, figures, and manifests from checked-in results_dataset/ artifacts if present.');
 end
 
 % 2) Generate additional reference artifacts required for XMODEL handoff.

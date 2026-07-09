@@ -1,4 +1,4 @@
-sample_index,time_s,voltage_V,code_signed_est
+sample_index,time_s,voltage_V,source_code_signed_est_5uV_per_code
 0,0.0,0.00035,70
 1,0.001,0.000345,69
 2,0.002,0.000345,69

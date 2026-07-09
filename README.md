@@ -67,6 +67,9 @@ matlab_afe_validation/
 | Dynamic range/headroom | `docs/dynamic_range_headroom_reference.md`, `results_dataset/afe_dynamic_range_headroom_summary.csv` |
 | ADC code mapping | `docs/adc_code_mapping_convention.md`, `results_dataset/adc_code_mapping_test.csv` |
 | XMODEL handoff | `docs/MATLAB_TO_XMODEL_HANDOFF.md` |
+| Input dataset manifest | `docs/INPUT_DATASET_MANIFEST.md`, `results_dataset/input_dataset_manifest.csv` |
+| Validation status | `docs/VALIDATION_STATUS.md` |
+| Figure captions | `figures/FIGURE_CAPTIONS.md` |
 | Reference vectors | `reference_vectors/*`, `reference_vectors/reference_vector_manifest.csv` |
 | Figures | `figures/*.png`, `figures/*.pdf` |
 
@@ -109,7 +112,27 @@ figure export
 manifest/hash generation
 ```
 
-실제 4-class ECG 입력 데이터셋이 있는 경우 `afe_input_dataset/`을 같은 폴더 아래에 둔 뒤 실행한다. 이미 생성된 reference package는 `results_dataset/` 및 `reference_vectors/`에 포함되어 있다.
+실제 4-class ECG 입력 데이터셋이 있는 경우 `afe_input_dataset/`을 같은 폴더 아래에 둔 뒤 실행한다.
+
+재현성 기준은 다음과 같다.
+
+```text
+If afe_input_dataset/ is available:
+    run_all_matlab_afe_prevalidation.m regenerates the dataset-level MATLAB outputs
+    and rebuilds the reference package.
+
+If afe_input_dataset/ is absent:
+    the script rebuilds secondary reports, figures, and manifests from the checked-in
+    results_dataset/ artifacts.
+```
+
+즉, top-level script가 항상 raw ECG input부터 모든 것을 재생성하는 것은 아니다. Fresh clone에서 raw input부터 완전 재생성하려면 `afe_input_dataset/`이 필요하다. 이미 생성된 reference package는 `results_dataset/` 및 `reference_vectors/`에 포함되어 있다.
+
+
+## 60 Hz notch 해석 주의
+
+MATLAB time-domain chain의 60 Hz digital notch approximation은 정확히 60 Hz에서 ideal zero를 만들 수 있다. 이 numerical value는 실제 analog attenuation claim이 아니다.  
+최종 논문에서 사용할 analog-style notch attenuation claim은 `docs/notch_60hz_reference.md`와 `results_dataset/notch_dense_sweep.csv`의 active Twin-T dense sweep 기준을 사용한다.
 
 ## 범위와 한계
 
